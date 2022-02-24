@@ -1,26 +1,33 @@
 import React from "react"; 
 import Restaurant from "./Restaurant";
+import axios from "axios"
 
-const dummyData = [{
-    name: "4 Charles Prime Rib",
-    cuisine: "american",
-    googleLink: "https://nycprimerib.com/",
-    cost: 4
-}, 
-{
-    name: "Fish Cheeks",
-    cuisine: "thai",
-    googleLink: "https://www.fishcheeksnyc.com/",
-    cost: 3
-}]
+
 
 class Restaurants extends React.Component {
+    constructor () {
+        super ();
+        this.state = {
+            fetchedRestaurants : null
+        }
+    }
+    async componentDidMount () {
+        const response = await axios.get("/restaurants");
+        const restaurants = response.data;
+        this.setState({ fetchedRestaurants: restaurants})
+        
+
+    }
     render (){
+        if (this.state.fetchedRestaurants === null){
+            return <h1>Loading...</h1>
+        }
         return (
             <div id="restaurant-list">
                <h3>Restaurant List</h3>  
-               {dummyData.map((restaurant) => {
-                   return <Restaurant theRestaurant={restaurant} />
+               {this.state.fetchedRestaurants.map((rest) => {
+                   return <div key={rest.id}> <Restaurant theRestaurant={rest}/> </div>
+
                })}
             </div>
            
