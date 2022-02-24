@@ -1,38 +1,48 @@
 import React from "react"; 
 import Restaurant from "./Restaurant";
-import axios from "axios"
+import {fetchRestaurantsfromServer} from "../store/restaurants"
+import axios from "axios";
+import {connect} from "react-redux"
 
 
 
 class Restaurants extends React.Component {
-    constructor () {
-        super ();
-        this.state = {
-            fetchedRestaurants : null
-        }
-    }
-    async componentDidMount () {
-        const response = await axios.get("/restaurants");
-        const restaurants = response.data;
-        this.setState({ fetchedRestaurants: restaurants})
-        
 
+    componentDidMount() {
+        this.props.fetchRestaurants()
     }
+   
     render (){
-        if (this.state.fetchedRestaurants === null){
+        if (this.props.restaurants.length === 0){
             return <h1>Loading...</h1>
         }
         return (
             <div id="restaurant-list">
-               <h3>Restaurant List</h3>  
-               {this.state.fetchedRestaurants.map((rest) => {
+               <h1> Favorites List</h1>  
+               {this.props.restaurants.map((rest) => {
                    return <div key={rest.id}> <Restaurant theRestaurant={rest}/> </div>
 
                })}
+               <button>add new restaurant</button>
             </div>
            
         )
     }
 }
 
-export default Restaurants;
+const mapStateToProps = (state) => {
+    return {
+        restaurants: state.restaurants
+    }
+}
+
+const dispatchToStore = (dispatch) => {
+    return {
+        fetchRestaurants: () => dispatch(fetchRestaurantsfromServer())
+    }
+}
+
+
+
+export default connect(mapStateToProps, dispatchToStore)(Restaurants)
+

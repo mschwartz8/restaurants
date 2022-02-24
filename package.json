@@ -22,6 +22,11 @@
     "pg": "^8.7.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.4.1",
+    "scrollmagic": "^2.0.8",
     "sequelize": "^6.16.2",
     "watch": "^1.0.2"
   },
